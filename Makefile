@@ -1,5 +1,5 @@
 # My basic makefile for linux apps
-# Automatic loading all c files in root directory and all subdirectorys
+# Automatic loading all c files in root directory and all subdirectorys, ignore .git and .svn
 #
 
 SHELL = /bin/bash
@@ -15,13 +15,13 @@ LDFLAGS += -L./
 
 
 
-SRC_DIRECTORY = $(shell find -type d)
+SRC_DIRECTORY := $(shell find -path "./.git" -prune -o -path "./.svn" -prune -o -type d -print)
 CFLAGS += $(foreach i, $(SRC_DIRECTORY), -I$i)
 
-SOURCE = $(foreach i, $(SRC_DIRECTORY), $(wildcard $i/*.c))
+SOURCE := $(foreach i, $(SRC_DIRECTORY), $(wildcard $i/*.c))
 
-OBJS = $(patsubst ./%.c, %.o, $(SOURCE))
-OBJS_NUM = $(words $(OBJS))
+OBJS := $(patsubst ./%.c, %.o, $(SOURCE))
+OBJS_NUM := $(words $(OBJS))
 
 
 
@@ -50,6 +50,5 @@ clean:
 
 run:
 	./$(BIN)
-
 
 
